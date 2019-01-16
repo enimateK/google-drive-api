@@ -9,7 +9,7 @@ public class Program {
         String rangeFrom = "A1";
         String rangeTo   = "B2";
         try {
-            List<List<Object>> data = new GoogleSheetsApi().getCells(fileId, sheet, rangeFrom, rangeTo);
+            List<List<Object>> data = new GoogleSheetsApi(fileId).getCells(sheet, rangeFrom, rangeTo);
             for(List<Object> objects : data) {
                 StringBuilder line = new StringBuilder();
                 for(Object object : objects) {

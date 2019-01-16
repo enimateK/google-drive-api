@@ -19,43 +19,44 @@ import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.List;
 
-public class GoogleSheetsApi {
+class GoogleSheetsApi {
 
     // Adresse mail à autoriser par la sheet : processdev@process-dev-gdrive.iam.gserviceaccount.com
 
     private static final String APPLICATION_NAME      = "GoogleDriveApi";
     private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
-    private static final String TOKENS_DIRECTORY_PATH = "tokens";
 
-    private static final List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
-    private final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
+    private final List<String> SCOPES_READ   = Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
+    private final List<String> SCOPES_WRITE  = Collections.singletonList(SheetsScopes.SPREADSHEETS);
+    private final JsonFactory JSON_FACTORY   = JacksonFactory.getDefaultInstance();
 
-    public GoogleSheetsApi() {
+    private String mFileId;
+
+    GoogleSheetsApi(String fileId) {
+        mFileId = fileId;
     }
 
-    private Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
+    private Credential getCredentials(final List<String> SCOPES) throws IOException {
         return GoogleCredential.fromStream(GoogleSheetsApi.class.getResourceAsStream(CREDENTIALS_FILE_PATH)).createScoped(SCOPES);
-        /*InputStream in = TestSheets.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
-        GoogleClientSecrets secrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
-
-        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-                HTTP_TRANSPORT, JSON_FACTORY, secrets, SCOPES)
-                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
-                .setAccessType("offline")
-                .build();
-        return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");*/
     }
 
-    public List<List<Object>> getCells(String fileId, String sheet, String cellStart, String cellEnd) throws GeneralSecurityException, IOException {
+    private Credential getReadOnlyCredentials() throws IOException {
+        return getCredentials(SCOPES_READ);
+    }
+
+    private Credential getWriteCredentials() throws IOException {
+        return getCredentials(SCOPES_WRITE);
+    }
+
+    List<List<Object>> getCells(String sheet, String cellStart, String cellEnd) throws GeneralSecurityException, IOException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         final String range = sheet + "!" + cellStart + ":" + cellEnd;
-        Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+        Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getReadOnlyCredentials())
                 .setApplicationName(APPLICATION_NAME)
                 .build();
         ValueRange response = service.spreadsheets().values()
-                .get(fileId, range)
+                .get(mFileId, range)
                 .execute();
-        List<List<Object>> values = response.getValues();
-        return values;
+        return response.getValues();
     }
 }
