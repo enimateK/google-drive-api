@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<google-sheets-file>
+    <sheet name="Meta-Donnees">
+        <column name="Version Applicatif" index="A"/>
+        <column name="Nom Projet" index="B"/>
+    </sheet>
+    <sheet name="Codes tarifaires">
+        <column name="Version" index="A"/>
+        <column name="Code tarifaire" index="B"/>
+        <column name="Libelle code tarifaire" index="C"/>
+        <column name="Description code tarifaire" index="D"/>
+    </sheet>
+    <sheet name="Fiches de formations">
+        <column name="Version" index="A"/>
+        <column name="Code tarifaire" index="B"/>
+        <column name="Code de fiche de formation" index="C"/>
+        <column name="Libelle de fiche de formation" index="D"/>
+        <column name="Description de fiche de formation" index="E"/>
+        <column name="Duree" index="F"/>
+        <column name="Deroulement / plan de travail" index="G"/>
+        <column name="Formateur referent" index="H"/>
+        <column name="Stagiaire referent" index="I"/>
+        <column name="Societe(s) formee(s)" index="J"/>
+        <column name="Dates de formation" index="K"/>
+        <column name="Remarques ou demandes (des referents)" index="L"/>
+    </sheet>
+    <sheet name="Elements des fiches de formation">
+        <column name="Version" index="A"/>
+        <column name="Code tarifaire" index="B"/>
+        <column name="Code de fiche de formation" index="C"/>
+        <column name="Categorie d'element" index="D"/>
+        <column name="Numero sequentiel" index="E"/>
+        <column name="Description de l'element" index="F"/>
+        <column name="Etat de l'element" index="G"/>
+    </sheet>
+    <sheet name="Taches du projet">
+        <column name="Type Action" index="A"/>
+        <column name="Ordre Projet" index="B"/>
+        <column name="Code Tarifaire" index="C"/>
+        <column name="Sous Code Tarifaire" index="D"/>
+        <column name="Famille d'action" index="E"/>
+        <column name="Action" index="F"/>
+        <column name="Phase" index="G"/>
+        <column name="Temps prévu" index="H"/>
+        <column name="Temps minimum estimé" index="I"/>
+        <column name="Type de facturation" index="J"/>
+        <column name="Coût unitaire" index="K"/>
+        <column name="Charge minimum maîtrise ouvrage" index="L"/>
+        <column name="Apparant sur planning" index="M"/>
+        <column name="Date début" index="N"/>
+        <column name="Date fin" index="O"/>
+        <column name="Référent Maitre oeuvre" index="P"/>
+        <column name="Référent Maitre ouvrage" index="Q"/>
+        <column name="Liste ressources" index="R"/>
+        <column name="Description" index="S"/>
+    </sheet>
+</google-sheets-file>
