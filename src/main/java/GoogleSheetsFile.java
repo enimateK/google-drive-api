@@ -14,4 +14,9 @@ public class GoogleSheetsFile {
     public void setSheetsList(List<Sheet> sheets) {
         this.sheets = sheets;
     }
+
+    @Override
+    public String toString() {
+        return sheets.toString();
+    }
 }

@@ -2,24 +2,19 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.net.URL;
 
 class XMLReader {
-
-    private String mFileId;
-
-    XMLReader(String fileId) {
-        mFileId = fileId;
-    }
-
-    public static GoogleSheetsFile getGoogleSheetsFile(String version) {System.out.println("toto");
+    public GoogleSheetsFile getGoogleSheetsFile(String version) {
         GoogleSheetsFile googleSheetsFile = new GoogleSheetsFile();
         try {
-            File file = new File("../resources/version_"+ version +".xml");
+            URL url = getClass().getResource("/version_"+ version +".xml");
+            File file = new File(url.getPath());
             JAXBContext jaxbContext = JAXBContext.newInstance(GoogleSheetsFile.class);
-//            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-//
-//            googleSheetsFile = (GoogleSheetsFile) jaxbUnmarshaller.unmarshal(file);
-//
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+            googleSheetsFile = (GoogleSheetsFile) jaxbUnmarshaller.unmarshal(file);
+
         } catch ( JAXBException e) {
             e.printStackTrace();
         }
