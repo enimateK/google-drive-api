@@ -6,12 +6,12 @@ import java.util.List;
 public class GoogleSheetsFile {
     private List<Sheet> sheets;
 
-    public List<Sheet> getSheetsList() {
+    public List<Sheet> getSheets() {
         return sheets;
     }
 
     @XmlElement(name = "sheet")
-    public void setSheetsList(List<Sheet> sheets) {
+    public void setSheets(List<Sheet> sheets) {
         this.sheets = sheets;
     }
 
