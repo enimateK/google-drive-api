@@ -1,11 +1,9 @@
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.Arrays;
-import java.util.List;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
 
 class XMLReader {
-    private static final String META_DATA_SHEET_NAME   = "Meta-Donnees";
-    private static final String VERSION_COLUMN = "A2";
 
     private String mFileId;
 
@@ -13,17 +11,19 @@ class XMLReader {
         mFileId = fileId;
     }
 
-    String getVersion() {
+    public static GoogleSheetsFile getGoogleSheetsFile(String version) {System.out.println("toto");
+        GoogleSheetsFile googleSheetsFile = new GoogleSheetsFile();
         try {
-            List<List<Object>> metaData = new GoogleSheetsApi(mFileId).getCells(META_DATA_SHEET_NAME, VERSION_COLUMN, VERSION_COLUMN);
-
-            return metaData.get(0).get(0).toString();
-        } catch (GeneralSecurityException | IOException e) {
+            File file = new File("../resources/version_"+ version +".xml");
+            JAXBContext jaxbContext = JAXBContext.newInstance(GoogleSheetsFile.class);
+//            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+//
+//            googleSheetsFile = (GoogleSheetsFile) jaxbUnmarshaller.unmarshal(file);
+//
+        } catch ( JAXBException e) {
             e.printStackTrace();
         }
 
-        return "Error";
+        return googleSheetsFile;
     }
-
-
 }

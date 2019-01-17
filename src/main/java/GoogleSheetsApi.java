@@ -30,6 +30,9 @@ class GoogleSheetsApi {
     private final List<String> SCOPES_WRITE  = Collections.singletonList(SheetsScopes.SPREADSHEETS);
     private final JsonFactory JSON_FACTORY   = JacksonFactory.getDefaultInstance();
 
+    private static final String META_DATA_SHEET_NAME   = "Meta-Donnees";
+    private static final String VERSION_COLUMN = "A2";
+
     private String mFileId;
 
     GoogleSheetsApi(String fileId) {
@@ -46,6 +49,17 @@ class GoogleSheetsApi {
 
     private Credential getWriteCredentials() throws IOException {
         return getCredentials(SCOPES_WRITE);
+    }
+
+    String getVersion() {
+        List<List<Object>> metaData = null;
+        try {
+            metaData = new GoogleSheetsApi(mFileId).getCells(META_DATA_SHEET_NAME, VERSION_COLUMN, VERSION_COLUMN);
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return metaData != null ? metaData.get(0).get(0).toString() : "Error";
     }
 
     List<List<Object>> getCells(String sheet, String cellStart, String cellEnd) throws GeneralSecurityException, IOException {
