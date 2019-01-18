@@ -11,7 +11,9 @@ public class Program {
         String version = new GoogleSheetsApi(fileId).getVersion();
         GoogleSheetsFile googleSheetsFile = new XMLReader().getGoogleSheetsFile(version);
         List<List<List<Object>>> content = new ArrayList<>();
+        List<String> sheetsNames = new ArrayList<>();
         for (Sheet sheet : googleSheetsFile.getSheets()) {
+            sheetsNames.add(sheet.getName());
             List<String> indexes = new ArrayList<>();
             for (Column column : sheet.getColumns()) {
                 indexes.add(column.getIndex());
@@ -20,7 +22,7 @@ public class Program {
             content.add(sheetContent);
             indexes.clear();
         }
-        JSONObject json = new JSONFormatter().getJson(content);
+        JSONObject json = new JSONFormatter().getJson(content, sheetsNames);
 
         System.out.println(json);
     }

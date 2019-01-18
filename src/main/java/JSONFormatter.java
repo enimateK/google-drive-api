@@ -3,7 +3,7 @@ import org.json.simple.JSONObject;
 import java.util.List;
 
 public class JSONFormatter {
-    JSONObject getJson(List<List<List<Object>>> fileContent) {
+    JSONObject getJson(List<List<List<Object>>> fileContent, List<String> sheetsName) {
         JSONObject jsonObject = new JSONObject();
         JSONObject jsonSheet = new JSONObject();
         JSONObject jsonLine = new JSONObject();
@@ -19,12 +19,12 @@ public class JSONFormatter {
                         jsonLine.put(sheet.get(0).get(j), cell);
                         j++;
                     }
+                    jsonSheet.put("line" + i, jsonLine);
+                    jsonLine = new JSONObject();
                 }
-                jsonSheet.put("line" + i, jsonLine);
-                jsonLine = new JSONObject();
                 i++;
             }
-            jsonObject.put("sheet" + sheetNumber, jsonSheet);
+            jsonObject.put(sheetsName.get(sheetNumber), jsonSheet);
             jsonSheet = new JSONObject();
             sheetNumber++;
         }
