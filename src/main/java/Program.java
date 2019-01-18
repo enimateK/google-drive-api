@@ -1,3 +1,6 @@
+import model.Column;
+import model.GoogleSheetsFile;
+import model.Sheet;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
