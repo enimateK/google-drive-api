@@ -1,3 +1,5 @@
+import org.json.simple.JSONObject;
+
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
@@ -8,16 +10,18 @@ public class Program {
         String fileId = "1nv43m6oX6VWHg2iENxYq7f-IFfWg8MDCqRuuNAQK4o8";
         String version = new GoogleSheetsApi(fileId).getVersion();
         GoogleSheetsFile googleSheetsFile = new XMLReader().getGoogleSheetsFile(version);
-        List<String> indexes = new ArrayList<>();
-        List<Object> content = new ArrayList<>();
+        List<List<List<Object>>> content = new ArrayList<>();
         for (Sheet sheet : googleSheetsFile.getSheets()) {
+            List<String> indexes = new ArrayList<>();
             for (Column column : sheet.getColumns()) {
                 indexes.add(column.getIndex());
             }
-            List sheetContent = new GoogleSheetsApi(fileId).getCells(sheet.getName(), indexes.get(0), indexes.get(indexes.size() - 1));
+            List<List<Object>> sheetContent = new GoogleSheetsApi(fileId).getCells(sheet.getName(), indexes.get(0), indexes.get(indexes.size() - 1));
             content.add(sheetContent);
             indexes.clear();
         }
-        System.out.println(content);
+        JSONObject json = new JSONFormatter().getJson(content);
+
+        System.out.println(json);
     }
 }
