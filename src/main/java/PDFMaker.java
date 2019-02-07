@@ -21,12 +21,10 @@ public class PDFMaker {
                 content.beginText();
                 content.setFont(PDType1Font.TIMES_ROMAN, 12);
                 content.newLineAtOffset(100, 700);
-                if (i != 0) {
-                    for (Object cell : sheet.get(i)) {
-                        content.newLineAtOffset(0, -15);
-                        String text = cell.toString().replace("\n", " ").replace("\r", " ");
-                        content.showText(text);
-                    }
+                for (Object cell : sheet.get(i)) {
+                    content.newLineAtOffset(0, -15);
+                    String text = cell.toString().replace("\n", " ").replace("\r", " ");
+                    content.showText(text);
                 }
                 content.endText();
                 content.close();
