@@ -19,12 +19,16 @@ public class Program {
     private final static String HOST = "http://localhost/";
 
     public static void main(String... args) {
+        api();
+    }
+
+    public static void api() {
         URI baseUri = UriBuilder.fromUri(HOST).port(PORT).build();
         ResourceConfig config = new ResourceConfig(GoogleSheetsRESTService.class);
         HttpServer server = JdkHttpServerFactory.createHttpServer(baseUri, config);
     }
 
-    public static void main2()  throws GeneralSecurityException, IOException {
+    public static void pdf()  throws GeneralSecurityException, IOException {
         String fileId = "1nv43m6oX6VWHg2iENxYq7f-IFfWg8MDCqRuuNAQK4o8";
         String version = new GoogleSheet.GoogleSheetsFile(fileId).getMetadata().getVersion();
         GoogleSheetsFile fileInfo = new XMLReader().getGoogleSheetsFile(version);

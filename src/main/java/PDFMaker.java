@@ -1,3 +1,4 @@
+import GoogleSheet.Cell;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -7,11 +8,11 @@ import java.io.IOException;
 import java.util.List;
 
 public class PDFMaker {
-    public static void createPDFFromList (List<List<List<Object>>> fileContent) throws IOException {
+    public static void createPDFFromList (List<List<List<Cell>>> fileContent) throws IOException {
 
         PDDocument document = new PDDocument();
 
-        for(List<List<Object>> sheet : fileContent) {
+        for(List<List<Cell>> sheet : fileContent) {
             int i = 0;
             PDPage page = new PDPage();
             document.addPage(page);
@@ -22,9 +23,9 @@ public class PDFMaker {
             content.newLineAtOffset(100, 700);
             while (i < sheet.size()) {
 
-                for (Object cell : sheet.get(i)) {
+                for (Cell cell : sheet.get(i)) {
                     content.newLineAtOffset(0, -15);
-                    String text = cell.toString().replace("\n", " ").replace("\r", " ");
+                    String text = cell.getValue().replace("\n", " ").replace("\r", " ");
                     content.showText(text);
                 }
                 i++;
