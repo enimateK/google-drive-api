@@ -1,4 +1,4 @@
-import model.File;
+import model.GoogleSheetsFile;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -6,20 +6,20 @@ import javax.xml.bind.Unmarshaller;
 import java.net.URL;
 
 class XMLReader {
-    public File getGoogleSheetsFile(String version) {
-        File googleSheetsFile = new File();
+    public GoogleSheetsFile getGoogleSheetsFile(String version) {
+        GoogleSheetsFile fileInfo = new GoogleSheetsFile();
         try {
             URL url = getClass().getResource("/version_"+ version +".xml");
             java.io.File file = new java.io.File(url.getPath());
-            JAXBContext jaxbContext = JAXBContext.newInstance(File.class);
+            JAXBContext jaxbContext = JAXBContext.newInstance(GoogleSheetsFile.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-            googleSheetsFile = (File) jaxbUnmarshaller.unmarshal(file);
+            fileInfo = (GoogleSheetsFile) jaxbUnmarshaller.unmarshal(file);
 
         } catch ( JAXBException e) {
             e.printStackTrace();
         }
 
-        return googleSheetsFile;
+        return fileInfo;
     }
 }

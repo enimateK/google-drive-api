@@ -14,7 +14,7 @@ public class GoogleSheetsFile extends GoogleSheetsService {
     private static final String META_DATA_SHEET_NAME  = "Meta-Donnees";
     private Metadata metadata;
 
-    private String mFileId;
+    public final String mFileId;
 
     public GoogleSheetsFile(String fileId) {
         mFileId = fileId;
@@ -39,7 +39,7 @@ public class GoogleSheetsFile extends GoogleSheetsService {
         return Cell.get(sheet, response.getValues(), cellStart);
     }
 
-    private void writeInCell(String sheet, String cell, String value) throws GeneralSecurityException, IOException {
+    public void writeInCell(String sheet, String cell, String value) throws GeneralSecurityException, IOException {
         final String range = sheet + "!" + cell;
         final ValueRange valueRange = new ValueRange();
         valueRange.setValues(Collections.singletonList(Collections.singletonList(value)));

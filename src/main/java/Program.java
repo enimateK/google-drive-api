@@ -1,8 +1,7 @@
 import GoogleSheet.Cell;
-import GoogleSheet.GoogleSheetsFile;
 import com.sun.net.httpserver.HttpServer;
 import model.Column;
-import model.File;
+import model.GoogleSheetsFile;
 import model.Sheet;
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -27,17 +26,17 @@ public class Program {
 
     public static void main2()  throws GeneralSecurityException, IOException {
         String fileId = "1nv43m6oX6VWHg2iENxYq7f-IFfWg8MDCqRuuNAQK4o8";
-        String version = new GoogleSheetsFile(fileId).getMetadata().getVersion();
-        File file = new XMLReader().getGoogleSheetsFile(version);
+        String version = new GoogleSheet.GoogleSheetsFile(fileId).getMetadata().getVersion();
+        GoogleSheetsFile fileInfo = new XMLReader().getGoogleSheetsFile(version);
         List<List<List<Cell>>> content = new ArrayList<>();
         List<String> sheetsNames = new ArrayList<>();
-        for (Sheet sheet : file.getSheets()) {
-            sheetsNames.add(sheet.getName());
+        for (Sheet sheetInfo : fileInfo.getSheets()) {
+            sheetsNames.add(sheetInfo.getName());
             List<String> indexes = new ArrayList<>();
-            for (Column column : sheet.getColumns()) {
-                indexes.add(column.getIndex());
+            for (Column columnInfo : sheetInfo.getColumnsInfo()) {
+                indexes.add(columnInfo.getIndex());
             }
-            List<List<Cell>> sheetContent = new GoogleSheetsFile(fileId).getCells(sheet.getName(), indexes.get(0), indexes.get(indexes.size() - 1));
+            List<List<Cell>> sheetContent = new GoogleSheet.GoogleSheetsFile(fileId).getCells(sheetInfo.getName(), indexes.get(0), indexes.get(indexes.size() - 1));
             content.add(sheetContent);
             indexes.clear();
         }
