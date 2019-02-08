@@ -26,4 +26,7 @@ dependencies {
     compile 'javax.xml.bind:jaxb-api:2.3.0'
     compile('javax.activation:activation:1.1')
     compile('org.glassfish.jaxb:jaxb-runtime:2.3.0')
+    compile 'org.apache.pdfbox:pdfbox:2.0.8'
+    compile 'org.apache.pdfbox:preflight:2.0.8'
+
 }

@@ -41,6 +41,7 @@ public class Program {
             indexes.clear();
         }
         JSONObject json = new JSONFormatter().getJson(content, sheetsNames);
+        PDFMaker.createPDFFromList(content);
 
         System.out.println(json);
     }
