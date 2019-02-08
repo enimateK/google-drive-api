@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 @XmlRootElement(name="google-sheets-file")
-public class GoogleSheetsFile {
+public class File {
     private List<Sheet> sheets;
 
     public List<Sheet> getSheets() {
