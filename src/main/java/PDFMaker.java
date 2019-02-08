@@ -13,23 +13,24 @@ public class PDFMaker {
 
         for(List<List<Object>> sheet : fileContent) {
             int i = 0;
-            while (i < sheet.size()) {
-                PDPage page = new PDPage();
-                document.addPage(page);
-                PDPageContentStream content = new PDPageContentStream(document, page);
+            PDPage page = new PDPage();
+            document.addPage(page);
+            PDPageContentStream content = new PDPageContentStream(document, page);
 
-                content.beginText();
-                content.setFont(PDType1Font.TIMES_ROMAN, 12);
-                content.newLineAtOffset(100, 700);
+            content.beginText();
+            content.setFont(PDType1Font.TIMES_ROMAN, 12);
+            content.newLineAtOffset(100, 700);
+            while (i < sheet.size()) {
+
                 for (Object cell : sheet.get(i)) {
                     content.newLineAtOffset(0, -15);
                     String text = cell.toString().replace("\n", " ").replace("\r", " ");
                     content.showText(text);
                 }
-                content.endText();
-                content.close();
                 i++;
             }
+            content.endText();
+            content.close();
         }
 
 
