@@ -5,16 +5,16 @@ import javax.xml.bind.annotation.XmlElement;
 import java.util.List;
 
 public class Sheet {
-    private List<Column> columns;
+    private List<Column> columnsInfo;
     private String name;
 
-    public List<Column> getColumns() {
-        return columns;
+    public List<Column> getColumnsInfo() {
+        return columnsInfo;
     }
 
     @XmlElement(name = "column")
-    public void setColumns(List<Column> columns) {
-        this.columns = columns;
+    public void setColumnsInfo(List<Column> columnsInfo) {
+        this.columnsInfo = columnsInfo;
     }
 
     public String getName() {
@@ -28,6 +28,6 @@ public class Sheet {
 
     @Override
     public String toString() {
-        return columns.toString();
+        return columnsInfo.toString();
     }
 }
