@@ -1,26 +1,20 @@
-package GoogleSheet;
+package org.miage.isiForm.google.sheets;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Cell {
-    public final String sheet;
+    public final Row ref;
     public final int row;
     public final int col;
     private String lastValue;
     private String value;
 
-    private Cell(@Nonnull String sheet, int row, int col, @Nonnull String value) {
-        this.sheet     = sheet;
+    Cell(Row ref, int row, int col, @Nonnull String value) {
+        this.ref       = ref;
         this.row       = row;
         this.col       = col;
         this.value     = value;
         this.lastValue = value;
-    }
-
-    public String getSheet() {
-        return sheet;
     }
 
     public String getCol() {
@@ -51,7 +45,7 @@ public class Cell {
         return !lastValue.equals(value);
     }
 
-    static List<List<Cell>> get(String sheet, List<List<Object>> objectss, String cellStart) {
+    /*static List<List<Cell>> get(List<List<Object>> objectss, String cellStart) {
         List<List<Cell>> cellss = new ArrayList<>();
         StringBuilder colLetterStart = new StringBuilder();
         StringBuilder rowLetterStart = new StringBuilder();
@@ -70,7 +64,7 @@ public class Cell {
         for(List<Object> objects : objectss) {
             List<Cell> cells = new ArrayList<>();
             for(Object object : objects) {
-                cells.add(new Cell(sheet, row, col, object.toString()));
+                cells.add(new Cell(row, col, object.toString()));
                 col++;
             }
             cellss.add(cells);
@@ -78,5 +72,5 @@ public class Cell {
             row++;
         }
         return cellss;
-    }
+    }*/
 }

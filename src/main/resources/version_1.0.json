@@ -1,0 +1,273 @@
+{
+    "version": "1.0",
+    "sheets": {
+        "Codes tarifaires": {
+            "columns": {
+                "A": {
+                    "id": "version",
+                    "label": {
+                        "fr": "Version"
+                    }
+                },
+                "B": {
+                    "id": "Code tarifaire",
+                    "label": {
+                        "fr": "Code tarifaire"
+                    }
+                },
+                "C": {
+                    "id": "Libelle code tarifaire",
+                    "label": {
+                        "fr": "Libellé code tarifaire"
+                    }
+                },
+                "D": {
+                    "id": "Description code tarifaire",
+                    "label": {
+                        "fr": "Description code tarifaire"
+                    }
+                }
+            }
+        },
+        "Fiches de formations": {
+            "columns": {
+                "A": {
+                    "id": "version",
+                    "label": {
+                        "fr": "Version"
+                    }
+                },
+                "B": {
+                    "id": "Code tarifaire",
+                    "label": {
+                        "fr": "Code tarifaire"
+                    }
+                },
+                "C": {
+                    "id": "Code de fiche de formation",
+                    "label": {
+                        "fr": "Code de fiche de formation"
+                    }
+                },
+                "D": {
+                    "id": "Libelle de fiche de formation",
+                    "label": {
+                        "fr": "Libelle de fiche de formation"
+                    }
+                },
+                "E": {
+                    "id": "Description des fiches de formation",
+                    "label": {
+                        "fr": "Description des fiches de formation"
+                    }
+                },
+                "F": {
+                    "id": "Duree",
+                    "label": {
+                        "fr": "Durée"
+                    }
+                },
+                "G": {
+                    "id": "Deroulement / plan de travail",
+                    "label": {
+                        "fr": "Déroulement/plan de travail"
+                    }
+                },
+                "H": {
+                    "id": "Formateur referent",
+                    "label": {
+                        "fr": "Formateur référent"
+                    }
+                },
+                "I": {
+                    "id": "Stagiaire referent",
+                    "label": {
+                        "fr": "Stagiaire référent"
+                    }
+                },
+                "J": {
+                    "id": "Societe(s) formee(s)",
+                    "label": {
+                        "fr": "Société(s) formée(s)"
+                    }
+                },
+                "K": {
+                    "id": "Dates de formation",
+                    "label": {
+                        "fr": "Dates de formation"
+                    }
+                },
+                "L": {
+                    "id": "Remarques ou demandes (des referents)",
+                    "label": {
+                        "fr": "Remarques ou demandes (des référents)"
+                    }
+                }
+            }
+        },
+        "Elements des fiches de formation": {
+            "columns": {
+                "A": {
+                    "id": "version",
+                    "label": {
+                        "fr": "Version"
+                    }
+                },
+                "B": {
+                    "id": "Code tarifaire",
+                    "label": {
+                        "fr": "Code tarifaire"
+                    }
+                },
+                "C": {
+                    "id": "Code de fiche de formation",
+                    "label": {
+                        "fr": "Code de fiche de formation"
+                    }
+                },
+                "D": {
+                    "id": "Categorie d'element",
+                    "label": {
+                        "fr": "Catégorie d'élément"
+                    }
+                },
+                "E": {
+                    "id": "Numero sequentiel",
+                    "label": {
+                        "fr": "Numéro sequentiel"
+                    }
+                },
+                "F": {
+                    "id": "Description de l'element",
+                    "label": {
+                        "fr": "Description de l'élément"
+                    }
+                },
+                "G": {
+                    "id": "Etat de l'element",
+                    "label": {
+                        "fr": "Etat de l'élément"
+                    }
+                }
+            }
+        },
+        "Taches du projet": {
+            "columns": {
+                "A": {
+                    "id": "Type Action",
+                    "label": {
+                        "fr": "Type Action"
+                    }
+                },
+                "B": {
+                    "id": "Ordre Projet",
+                    "label": {
+                        "fr": "Ordre Projet"
+                    }
+                },
+                "C": {
+                    "id": "Code Tarifaire",
+                    "label": {
+                        "fr": "Code Tarifaire"
+                    }
+                },
+                "D": {
+                    "id": "Sous Code Tarifaire",
+                    "label": {
+                        "fr": "Sous Code Tarifaire"
+                    }
+                },
+                "E": {
+                    "id": "Famille d'action",
+                    "label": {
+                        "fr": "Famille d'action"
+                    }
+                },
+                "F": {
+                    "id": "Action",
+                    "label": {
+                        "fr": "Action"
+                    }
+                },
+                "G": {
+                    "id": "Phase",
+                    "label": {
+                        "fr": "Phase"
+                    }
+                },
+                "H": {
+                    "id": "Temps prévu",
+                    "label": {
+                        "fr": "Temps prévu"
+                    }
+                },
+                "I": {
+                    "id": "Temps minimum estimé",
+                    "label": {
+                        "fr": "Temps minimum estimé"
+                    }
+                },
+                "J": {
+                    "id": "Type de facturation",
+                    "label": {
+                        "fr": "Coût unitaire"
+                    }
+                },
+                "K": {
+                    "id": "Coût unitaire",
+                    "label": {
+                        "fr": "Coût unitaire"
+                    }
+                },
+                "L": {
+                    "id": "Charge minimum maîtrise ouvrage",
+                    "label": {
+                        "fr": "Charge minimum maîtrise ouvrage"
+                    }
+                },
+                "M": {
+                    "id": "Apparant sur planning",
+                    "label": {
+                        "fr": "Apparant sur planning"
+                    }
+                },
+                "N": {
+                    "id": "Date début",
+                    "label": {
+                        "fr": "Date début"
+                    }
+                },
+                "O": {
+                    "id": "Date fin",
+                    "label": {
+                        "fr": "Date fin"
+                    }
+                },
+                "P": {
+                    "id": "Référent Maitre oeuvre",
+                    "label": {
+                        "fr": "Référent Maitre oeuvre"
+                    }
+                },
+                "Q": {
+                    "id": "Référent Maitre ouvrage",
+                    "label": {
+                        "fr": "Référent Maitre ouvrage"
+                    }
+                },
+                "R": {
+                    "id": "Liste ressources",
+                    "label": {
+                        "fr": "Liste ressources"
+                    }
+                },
+                "S": {
+                    "id": "Description",
+                    "label": {
+                        "fr": "Description"
+                    }
+                }
+            }
+        }
+    }
+}
