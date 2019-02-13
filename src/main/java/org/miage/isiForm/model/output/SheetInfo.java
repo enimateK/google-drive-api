@@ -1,5 +1,6 @@
 package org.miage.isiForm.model.output;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.miage.isiForm.google.sheets.Cell;
 import org.miage.isiForm.google.sheets.Row;

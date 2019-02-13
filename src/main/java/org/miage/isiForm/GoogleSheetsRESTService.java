@@ -15,15 +15,15 @@ public class GoogleSheetsRESTService {
     public static abstract class Workbooks {
         private static final Map<String, Workbook> workbooks = new HashMap<>();
 
-        public static void add(Workbook workbook) {
+        static void add(Workbook workbook) {
             workbooks.put(workbook.fileId, workbook);
         }
 
-        public static boolean contains(String id) {
+        static boolean contains(String id) {
             return workbooks.containsKey(id);
         }
 
-        public static Workbook get(String id) {
+        static Workbook get(String id) {
             return workbooks.getOrDefault(id, null);
         }
     }
@@ -68,10 +68,20 @@ public class GoogleSheetsRESTService {
         Workbook workbook = Workbooks.get(id);
         try {
             workbook.writeInCells(sheet, cell, value);
-            return Message.getJson("La modification a bien été effectuée !");
         } catch (Throwable ex) {
             return ErrorInfo.getJson(ex);
         }
-        //return JsonWriter.formatJson(message.toString());
+        return Message.getJson("La modification a bien été effectuée !");
+    }
+
+    @POST
+    @Path("/update")
+    @Consumes("application/json")
+    public String updateWorkbook(WorkbookInfo workbookInfo) {
+        if(!Workbooks.contains(workbookInfo.getFileId()))
+            return ErrorInfo.getJson(new Error("Vous devez d'abord obtenir les données du google sheet avant d'écrire dedans !"));
+        Workbook workbook = Workbooks.get(workbookInfo.getFileId());
+        // TODO charger les données dans le workbook
+        return Message.getJson("La modification a bien été effectuée !");
     }
 }

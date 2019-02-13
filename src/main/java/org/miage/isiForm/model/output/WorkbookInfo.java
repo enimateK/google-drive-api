@@ -8,6 +8,8 @@ import org.miage.isiForm.google.sheets.Workbook;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,5 +36,20 @@ public class WorkbookInfo {
         } catch(Throwable error) {
             return ErrorInfo.getJson(error);
         }
+    }
+
+    @JsonIgnore
+    public String getFileId() {
+        return fileId;
+    }
+
+    @JsonIgnore
+    public String getVersion() {
+        return version;
+    }
+
+    @JsonIgnore
+    public Collection<SheetInfo> getSheets() {
+        return Collections.unmodifiableCollection(sheets.values());
     }
 }

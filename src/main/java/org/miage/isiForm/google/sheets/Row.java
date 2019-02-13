@@ -15,6 +15,14 @@ public class Row {
         }
     }
 
+    public void update(List<Object> cells) {
+        int col = 1;
+        for(Cell cell : this.cells.values()) {
+            cell.setValue(cells.get(1).toString());
+            col++;
+        }
+    }
+
     public Collection<Cell> getCells() {
         return Collections.unmodifiableCollection(cells.values());
     }
