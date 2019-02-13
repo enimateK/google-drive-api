@@ -20,7 +20,7 @@ public class Workbook extends WorkbookBase {
 
     public Workbook(String fileId) throws Exception {
         super(fileId);
-        updateSheets();
+        createSheets();
         if(getMetadata() == null)
             throw new Exception("Ce n'est pas un fichier valide (pas de métadonnées)");
         if(getMappingFile() == null)
@@ -56,17 +56,22 @@ public class Workbook extends WorkbookBase {
 
     public List<Sheet> getSheets() throws GeneralSecurityException, IOException {
         if(needsToUpdate())
-            updateSheets();
+            createSheets();
         return new ArrayList<>(sheets.values());
     }
 
-    public void updateSheets() throws GeneralSecurityException, IOException {
+    public void createSheets() throws GeneralSecurityException, IOException {
         lastUpdate = Instant.now();
         for(SheetMappingInfo sheetInfo : getMappingFile ().getSheets()) {
             String firstIndex = sheetInfo.getFirstIndex();
             List<List<Object>> cellss = getCells(sheetInfo.getName(), firstIndex, sheetInfo.getLastIndex());
             addSheet(new Sheet(this, sheetInfo.getName(), sheetInfo.getColumns(), firstIndex, cellss));
         }
+    }
+
+    public void updateSheets() {
+        lastUpdate = Instant.now();
+        // TODO
     }
 
     public void save() {

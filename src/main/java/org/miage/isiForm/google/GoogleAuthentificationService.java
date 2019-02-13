@@ -26,7 +26,6 @@ public abstract class GoogleAuthentificationService {
     private final List<String> SCOPES_SHEETS_READ   = Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
     private final List<String> SCOPES_SHEETS_WRITE  = Collections.singletonList(SheetsScopes.SPREADSHEETS);
     private final List<String> SCOPES_DOCS_READ     = Collections.singletonList(DocsScopes.DOCUMENTS_READONLY);
-    private final List<String> SCOPES_DOCS_WRITE    = Collections.singletonList(DocsScopes.DOCUMENTS);
     private final JsonFactory JSON_FACTORY          = JacksonFactory.getDefaultInstance();
 
     /**
@@ -68,18 +67,11 @@ public abstract class GoogleAuthentificationService {
     }
 
     /**
-     * @return authentification google docs en lecture/écriture
-     */
-    private Credential getDocsWriteCredentials() throws IOException {
-        return getCredentials(SCOPES_DOCS_WRITE);
-    }
-
-    /**
      * @return Service de lecture google docs
      */
-    protected Docs.Documents getDocsService(boolean write) throws GeneralSecurityException, IOException {
+    protected Docs.Documents getDocsService() throws GeneralSecurityException, IOException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        return new Docs.Builder(HTTP_TRANSPORT, JSON_FACTORY, write ? getSheetsWriteCredentials() : getSheetsReadOnlyCredentials())
+        return new Docs.Builder(HTTP_TRANSPORT, JSON_FACTORY, getDocsReadOnlyCredentials())
                 .setApplicationName(APPLICATION_NAME)
                 .build().documents();
     }

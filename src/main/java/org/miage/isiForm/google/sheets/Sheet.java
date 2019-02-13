@@ -26,6 +26,22 @@ public class Sheet {
         }
     }
 
+    public void update(String firstCell, List<List<Object>> cellss) {
+        boolean first = true; // Pour éviter la ligne des labels
+        Util.RowCol rowCol = Util.getRowCol(firstCell);
+        int rowsSize  = rows.size();
+        for(List<Object> cells : cellss) {
+            if(!first) {
+                if(rowsSize >= rowCol.row - 1)
+                    rows.get(rowCol.row).update(cells);
+                else
+                    rows.add(new Row(this, rowCol.col, rowCol.row, cells));
+            }
+            rowCol.row++;
+            first = false;
+        }
+    }
+
     public ColumnMappingInfo getColumn(String index) {
         return columns.getOrDefault(index, null);
     }
