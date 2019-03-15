@@ -49,7 +49,7 @@ public class WorkbookInfo {
     }
 
     @JsonIgnore
-    public Collection<SheetInfo> getSheets() {
-        return Collections.unmodifiableCollection(sheets.values());
+    public Map<String, SheetInfo> getSheets() {
+        return Collections.unmodifiableMap(sheets);
     }
 }

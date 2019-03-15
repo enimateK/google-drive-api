@@ -1,5 +1,7 @@
 package org.miage.isiForm.google.sheets;
 
+import org.miage.isiForm.model.output.SheetInfo;
+import org.miage.isiForm.model.output.WorkbookInfo;
 import org.miage.isiForm.model.mapping.MappingInfo;
 import org.miage.isiForm.model.mapping.SheetMappingInfo;
 
@@ -77,6 +79,12 @@ public class Workbook extends WorkbookBase {
     public void save() {
         for(Sheet sheet : sheets.values()) {
             sheet.save();
+        }
+    }
+
+    public void update(WorkbookInfo workbook) {
+        for(Map.Entry<String, SheetInfo> sheet : workbook.getSheets().entrySet()) {
+            sheets.get(sheet.getKey()).update(sheet.getValue().getRows());
         }
     }
 }

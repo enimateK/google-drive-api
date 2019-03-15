@@ -13,6 +13,8 @@ public class ColumnMappingInfo {
     private String id;
     @JsonProperty("label")
     private Map<String, String> labels;
+    @JsonProperty("read-only")
+    private boolean readOnly;
 
     public String getIndex() {
         return sheet.getColumnIndex(this);

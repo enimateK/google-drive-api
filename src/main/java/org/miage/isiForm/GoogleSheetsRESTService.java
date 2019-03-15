@@ -12,7 +12,7 @@ import java.util.Map;
 @Path("/")
 @Produces("application/json")
 public class GoogleSheetsRESTService {
-    public static abstract class Workbooks {
+    static abstract class Workbooks {
         private static final Map<String, Workbook> workbooks = new HashMap<>();
 
         static void add(Workbook workbook) {
@@ -43,7 +43,7 @@ public class GoogleSheetsRESTService {
             Workbook workbook;
             if(Workbooks.contains(id)) {
                 workbook = Workbooks.get(id);
-                // TODO: update
+                // TODO: update depuis la sheet
             } else {
                 workbook = new Workbook(id);
                 Workbooks.add(workbook);

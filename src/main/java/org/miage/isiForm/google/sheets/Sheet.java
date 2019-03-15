@@ -8,7 +8,7 @@ public class Sheet {
     final Workbook workbook;
     public final String name;
     private Map<String, ColumnMappingInfo> columns = new HashMap<>();
-    private List<Row> rows = new ArrayList<>();
+    private Map<String, Row> rows = new HashMap<>();
 
     Sheet(Workbook workbook, String name, List<ColumnMappingInfo> columnInfos, String firstCell, List<List<Object>> cellss) {
         this.workbook = workbook;
@@ -20,7 +20,7 @@ public class Sheet {
         boolean first = true; // Pour éviter la ligne des labels
         for(List<Object> cells : cellss) {
             if(!first)
-                rows.add(new Row(this, rowCol.col, rowCol.row, cells));
+                rows.put(Integer.toString(rowCol.row), new Row(this, rowCol.col, rowCol.row, cells));
             rowCol.row++;
             first = false;
         }
@@ -33,12 +33,18 @@ public class Sheet {
         for(List<Object> cells : cellss) {
             if(!first) {
                 if(rowsSize >= rowCol.row - 1)
-                    rows.get(rowCol.row).update(cells);
+                    rows.get(Integer.toString(rowCol.row)).update(cells);
                 else
-                    rows.add(new Row(this, rowCol.col, rowCol.row, cells));
+                    rows.put(Integer.toString(rowCol.row), new Row(this, rowCol.col, rowCol.row, cells));
             }
             rowCol.row++;
             first = false;
+        }
+    }
+
+    public void update(Map<String, Map<String, String>> rowsInfo) {
+        for(Map.Entry<String, Map<String, String>> row : rowsInfo.entrySet()) {
+            rows.get(row.getKey());
         }
     }
 
@@ -50,13 +56,13 @@ public class Sheet {
         return columns.values();
     }
 
-    public List<Row> getRows() {
-        return Collections.unmodifiableList(rows);
+    public Collection<Row> getRows() {
+        return Collections.unmodifiableCollection(rows.values());
     }
 
     public void save() {
         List<List<Cell>> cellss = new ArrayList<>();
-        for(Row row : rows) {
+        for(Row row : rows.values()) {
             cellss.add(new ArrayList<>(row.getCells()));
         }
         try {

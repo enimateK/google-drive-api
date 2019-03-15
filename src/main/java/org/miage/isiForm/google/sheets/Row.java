@@ -34,4 +34,8 @@ public class Row {
             sheet.workbook.commit(sheet.name, cellss);
         } catch(Exception ignored) { }
     }
+
+    public String getRowNumber() {
+        return Integer.toString(cells.values().iterator().next().row);
+    }
 }

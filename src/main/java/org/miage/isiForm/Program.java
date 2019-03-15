@@ -22,9 +22,10 @@ public class Program {
         buildAPIlocally();
     }
 
-    public static void buildAPIlocally() {
+    private static void buildAPIlocally() {
         URI baseUri = UriBuilder.fromUri(HOST).port(PORT).build();
         ResourceConfig config = new ResourceConfig(GoogleSheetsRESTService.class);
+        config.register(new CORSFilter());
         HttpServer server = JdkHttpServerFactory.createHttpServer(baseUri, config);
     }
 

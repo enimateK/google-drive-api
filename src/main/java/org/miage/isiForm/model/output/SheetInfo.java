@@ -16,7 +16,7 @@ public class SheetInfo {
     @JsonProperty("columns")
     private Map<String, ColumnInfo> columns = new HashMap<>();
     @JsonProperty("rows")
-    private List<Map<String, String>> rows = new ArrayList<>();
+    private Map<String, Map<String, String>> rows = new HashMap<>();
 
     SheetInfo(Sheet sheet) {
         for(ColumnMappingInfo column : sheet.getColumns()) {
@@ -27,7 +27,11 @@ public class SheetInfo {
             for(Cell cell : row.getCells()) {
                 rowInfo.put(sheet.getColumn(cell.getCol()).getId(), cell.getValue());
             }
-            rows.add(rowInfo);
+            rows.put(row.getRowNumber(), rowInfo);
         }
+    }
+
+    public Map<String, Map<String, String>> getRows() {
+        return rows;
     }
 }
