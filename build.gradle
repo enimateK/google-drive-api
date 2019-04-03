@@ -6,6 +6,9 @@ version = '1.0'
 
 repositories {
     mavenCentral()
+    maven {
+        url 'http://repository.aspose.com/repo/'
+    }
 }
 
 dependencies {
@@ -17,10 +20,21 @@ dependencies {
     implementation group: 'org.glassfish.jersey.containers', name: 'jersey-container-jdk-http', version: '2.17'
     implementation group: 'org.glassfish.jersey.core', name: 'jersey-server', version: '2.17'
 
+    //implementation 'org.eclipse.birt:core:3.7.0'
+    //implementation 'org.eclipse.birt.runtime:org.eclipse.birt.runtime:4.3.0'
+    //implementation 'org.eclipse.birt.runtime:org.eclipse.birt.runtime:4.6.0-20160607'
+    //implementation 'net.sf.automatic-report-generator:birt-generator:v1.1'
+    implementation group: 'com.aspose', name: 'aspose-words', version: '19.3', classifier: 'jdk17'
+    implementation 'com.aspose:aspose-pdf:19.3'
+    implementation 'net.sf.jtidy:jtidy:r938'
+    implementation 'com.itextpdf:itextpdf:5.4.2'
+    implementation 'com.itextpdf.tool:xmlworker:5.4.1'
     implementation 'com.google.api-client:google-api-client:1.23.0'
     implementation 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
     implementation 'com.google.apis:google-api-services-sheets:v4-rev516-1.23.0'
     implementation 'com.google.apis:google-api-services-docs:v1-rev20190128-1.28.0'
+    implementation 'com.google.apis:google-api-services-drive:v3-rev156-1.25.0'
+    implementation 'com.google.apis:google-api-services-script:v1-rev175-1.23.0'
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
     implementation 'javax.xml.bind:jaxb-api:2.3.0'
     implementation('javax.activation:activation:1.1')
