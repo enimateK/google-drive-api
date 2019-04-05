@@ -27,6 +27,10 @@ public class Row {
         return Collections.unmodifiableCollection(cells.values());
     }
 
+    public Cell getCell(String key) {
+        return cells.getOrDefault(key, null);
+    }
+
     public void save() {
         List<List<Cell>> cellss = new ArrayList<>();
         cellss.add(new ArrayList<>(cells.values()));

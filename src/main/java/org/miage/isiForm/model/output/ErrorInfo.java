@@ -17,7 +17,10 @@ public class ErrorInfo {
 
     private ErrorInfo(Throwable error) {
         this.type       = error.getClass().getName();
-        this.message    = new String(error.getMessage().getBytes(), Charset.forName("UTF-8"));
+        if(error.getMessage() != null)
+            this.message = new String(error.getMessage().getBytes(), Charset.forName("UTF-8"));
+        else
+            this.message = "";
         for(StackTraceElement element : error.getStackTrace()) {
             stackTrace.add(element.toString());
         }

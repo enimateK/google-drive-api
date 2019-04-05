@@ -4,27 +4,65 @@ apply plugin: 'application'
 mainClassName = 'org.miage.isiForm.Program'
 version = '1.0'
 
+jar {
+    manifest {
+        attributes 'Main-Class': 'org.miage.isiForm.Program'
+    }
+}
+
+/*task fatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'org.miage.isiForm.Program'
+    }
+    baseName = "IsiFormServer"
+    from {
+        configurations.runtime.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    with jar
+}*/
+
 repositories {
     mavenCentral()
+    maven {
+        url 'http://repository.aspose.com/repo/'
+    }
 }
 
 dependencies {
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.8'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.8'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.8'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.8'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.8'
     implementation 'com.cedarsoftware:json-io:4.10.1'
     implementation 'javax.ws.rs:javax.ws.rs-api:2.0.1'
-    implementation group: 'org.glassfish.jersey.containers', name: 'jersey-container-jdk-http', version: '2.17'
-    implementation group: 'org.glassfish.jersey.core', name: 'jersey-server', version: '2.17'
+    implementation 'org.glassfish.jersey.containers:jersey-container-jdk-http:2.17'
+    implementation 'org.glassfish.jersey.core:jersey-server:2.17'
 
+    implementation group: 'com.aspose', name: 'aspose-words', version: '19.3', classifier: 'jdk17'
+    implementation 'com.aspose:aspose-pdf:19.3'
+    implementation 'net.sf.jtidy:jtidy:r938'
+    implementation 'com.itextpdf:itextpdf:5.4.2'
+    implementation 'com.itextpdf.tool:xmlworker:5.4.1'
+    implementation 'com.google.http-client:google-http-client-jackson:1.23.0'
+    implementation 'com.google.http-client:google-http-client-jackson2:1.23.0'
     implementation 'com.google.api-client:google-api-client:1.23.0'
+    implementation 'com.google.http-client:google-http-client-gson:1.23.0'
+    implementation 'com.google.cloud:google-cloud-bigquery:1.66.0'
+    implementation 'com.google.http-client:google-http-client:1.23.0'
     implementation 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
     implementation 'com.google.apis:google-api-services-sheets:v4-rev516-1.23.0'
     implementation 'com.google.apis:google-api-services-docs:v1-rev20190128-1.28.0'
+    implementation 'com.google.apis:google-api-services-drive:v3-rev156-1.25.0'
+    implementation 'com.google.apis:google-api-services-script:v1-rev175-1.23.0'
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
     implementation 'javax.xml.bind:jaxb-api:2.3.0'
-    implementation('javax.activation:activation:1.1')
-    implementation('org.glassfish.jaxb:jaxb-runtime:2.3.0')
+    implementation 'javax.activation:activation:1.1'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.0'
     implementation 'org.apache.pdfbox:pdfbox:2.0.8'
     implementation 'org.apache.pdfbox:preflight:2.0.8'
 
