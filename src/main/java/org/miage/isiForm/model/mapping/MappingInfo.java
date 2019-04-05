@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +18,11 @@ public class MappingInfo {
         MappingInfo file;
         ObjectMapper mapper = new ObjectMapper();
         try {
-            file = mapper.readValue(MappingInfo.class.getResource("/version_" + version + ".json"), MappingInfo.class);
+            File path = new File("settings/version_" + version + ".json");
+            if(path.exists() && !path.isDirectory())
+                file = mapper.readValue(path, MappingInfo.class);
+            else
+                file = mapper.readValue(MappingInfo.class.getResource("/version_" + version + ".json"), MappingInfo.class);
         } catch (Exception ex) {
             return null;
         }

@@ -22,7 +22,7 @@ public class Cell {
     }
 
     public String getCell() {
-        return Util.convertColumn(col) + ':' + row;
+        return Util.convertColumn(col) + row;
     }
 
     void updateLastValue() {
