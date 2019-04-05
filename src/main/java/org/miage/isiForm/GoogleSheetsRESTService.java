@@ -47,41 +47,29 @@ public class GoogleSheetsRESTService {
      * Gère l'instanciation des Documents
      */
     static abstract class Documents {
-        private static final Map<String, Document> documents = new HashMap<>();
-
-        private static Document getNew(String id) throws Exception {
-            Document document = new Document(id);
-            add(document);
-            return document;
+        private static Document getNew(String id, Workbook workbook) throws Exception {
+            return new Document(id, workbook);
         }
 
-        private static void add(Document document) {
-            documents.put(document.modelFileId, document);
-        }
-
-        private static boolean exists(String id) {
-            return documents.containsKey(id);
-        }
-
-        public static Document get(String id) throws Exception {
-            return getNew(id);
+        public static Document get(String id, Workbook workbook) throws Exception {
+            return getNew(id, workbook);
         }
     }
 
     /**
      * Identifiant de la Sheet exemple
      */
-    private final String SHEET_EXAMPLE = "1nv43m6oX6VWHg2iENxYq7f-IFfWg8MDCqRuuNAQK4o8";
+    public static final String SHEET_EXAMPLE = "1nv43m6oX6VWHg2iENxYq7f-IFfWg8MDCqRuuNAQK4o8";
 
     /**
      * Identifiant du modèle de PDF exemple 'Fiche de formation'
      */
-    private final String DOC_EXAMPLE_FORM = "1fvbeT5fwqiW-mznNvnPUy9sTHXUA7otTVY3GWjtlV08";
+    public static final String DOC_EXAMPLE_FORM = "1fvbeT5fwqiW-mznNvnPUy9sTHXUA7otTVY3GWjtlV08";
 
     /**
      * Identifiant du modèle de PDF exemple 'Programme de formation global'
      */
-    private final String DOC_EXAMPLE_LIST = "";
+    public static final String DOC_EXAMPLE_LIST = "";
 
     /**
      * Retourne le contenu de la Sheet passé en paramètre en JSON
@@ -90,7 +78,7 @@ public class GoogleSheetsRESTService {
     @Path("/get/{id}")
     public String getWorkbook(@PathParam("id") String id) {
         try {
-            return new WorkbookInfo(Workbooks.get(id, false)).getJson();
+            return new WorkbookInfo(Workbooks.get(id, true)).getJson();
         } catch(Throwable ex) {
             return ErrorInfo.getJson(ex);
         }
@@ -115,9 +103,9 @@ public class GoogleSheetsRESTService {
      * Retourne un PDF basé sur le modèle passé en paramètre rempli avec les données de la sheet passée en paramètre
      */
     @POST
-    @Path("/pdf")
+    @Path("/pdf/{sheetid}/{modelid}")
     @Consumes("application/json")
-    public String getPDF(String sheetId, String docId) {
+    public String getPDF(@PathParam("sheetid") String sheetId, @PathParam("modelid") String docId) {
         try {
 
             return "";

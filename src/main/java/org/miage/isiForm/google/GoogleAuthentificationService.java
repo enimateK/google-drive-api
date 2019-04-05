@@ -4,7 +4,6 @@ import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.docs.v1.Docs;
 import com.google.api.services.docs.v1.DocsScopes;
@@ -12,7 +11,6 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
-import org.mortbay.util.IO;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -32,7 +30,7 @@ public abstract class GoogleAuthentificationService {
     private final List<String> SCOPES_DOCS_WRITE   = Collections.singletonList(DocsScopes.DOCUMENTS);
     private final List<String> SCOPES_DRIVE_READ   = Collections.singletonList(DriveScopes.DRIVE_READONLY);
     private final List<String> SCOPES_DRIVE_WRITE  = Collections.singletonList(DriveScopes.DRIVE);
-    private final JsonFactory  JSON_FACTORY        = JacksonFactory.getDefaultInstance();
+    private final JacksonFactory JSON_FACTORY      = JacksonFactory.getDefaultInstance();
 
     /**
      * @return Authentification

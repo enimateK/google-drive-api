@@ -1,176 +1,121 @@
 package org.miage.isiForm.google.docs;
 
-import com.aspose.pdf.EpubLoadOptions;
-import com.aspose.pdf.HtmlLoadOptions;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.api.services.docs.v1.model.*;
-import com.google.api.services.drive.model.File;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.tool.xml.XMLWorkerHelper;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import com.aspose.words.*;
+import com.aspose.words.Table;
+import javafx.util.Pair;
 import org.miage.isiForm.google.GoogleAuthentificationService;
-import org.mortbay.util.IO;
-import org.w3c.tidy.Tidy;
+import org.miage.isiForm.google.sheets.Sheet;
+import org.miage.isiForm.google.sheets.Workbook;
 
-import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.security.GeneralSecurityException;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.List;
-import java.util.Stack;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Document extends GoogleAuthentificationService {
 
+    private static int currentId = 0;
+    private static int getNextId() {
+        if(currentId == Integer.MAX_VALUE)
+            currentId = 0;
+        else
+            currentId++;
+        return currentId;
+    }
+
     public final String modelFileId;
-    private final String duplicateFileId;
+    private final int uniqueId;
+    private final com.aspose.words.Document doc;
+    private final Workbook workbook;
 
-    private String content;
+    private String getTempWordPath() {
+        return "output/temp_" + this.uniqueId + ".docx";
+    }
 
-    public Document(String fileId) throws Exception {
+    private String getTempPDFPath() {
+        return "output/temp_" + this.uniqueId + ".pdf";
+    }
+
+    public Document(String fileId, Workbook workbook) throws Exception {
+        this.workbook    = workbook;
         this.modelFileId = fileId;
-        this.content     = getContent(true);
+        this.uniqueId    = getNextId();
+        UtilWord.writeToFile(getDriveService(false)
+                .export(modelFileId, "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                .executeMediaAsInputStream(),
+                getTempWordPath());
+        this.doc = new com.aspose.words.Document(getTempWordPath());
+        replaceTags();
+    }
 
-        /*com.google.api.services.docs.v1.model.Document doc = getDocsService(false).get(modelFileId).execute();
-        System.out.println(doc.getBody().getContent());
-        getDocsService(true).create(doc);
+    private void replaceTags() {
+        replaceTableLoopTags();
+        replaceLoopTags();
+        replaceVarTags();
+    }
 
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(doc.getBody().getContent().toString());
-        Stack<JsonNode> stack = new Stack<>();
-        JsonNode node = findText(stack, root);
-        for(JsonNode node2 : stack) {
-            System.out.println(node2.get("startIndex"));
+    private void replaceVarTags() {
+        for(Object runObj : doc.getChildNodes(NodeType.RUN, true)) {
+            Run run = (Run)runObj;
+            run.setText(UtilWord.replace(run.getText(), UtilWord.VAR, "date", new SimpleDateFormat("dd/MM/yyyy").format(new Date())));
         }
-        System.out.println(stack.get(4));*/
-
-        File file = getDriveService(true)
-                .copy(modelFileId, null)
-                .execute();
-        duplicateFileId = file.getId();
     }
 
-    public JsonNode findText(Stack<JsonNode> stack, JsonNode parent) {
-        JsonNode value = null;
-        stack.push(parent);
-        for(JsonNode node : parent) {
-            if(node.asText().contains("{{"))
-                return node;
-            value = findText(stack, node);
-            if(value != null)
-                break;
-        }
-        if(value == null)
-            stack.pop();
-        return value;
+    private void replaceLoopTags() {
+        /*for(Object object : doc.getChildNodes(NodeType.ANY, true)) {
+            TODO : Parcourir tous les nodes pour trouver les starts et revenir jusqu'au node parent qui permet de trouver le end correspondant
+        }*/
     }
 
-    public String getContent(boolean html) throws Exception {
-        InputStream stream = getDriveService(false)
-                .export(modelFileId, html ? "text/html" : "text/plain")
-                .executeMediaAsInputStream();
-        return toString(stream);
-    }
-
-    public void toPdf() throws Exception {
-        Tidy tidy = new Tidy();
-        tidy.setShowWarnings(false);
-        tidy.setXmlTags(false);
-        tidy.setInputEncoding("UTF-8");
-        tidy.setOutputEncoding("UTF-8");
-        tidy.setXHTML(true);
-        tidy.setMakeClean(true);
-        org.w3c.dom.Document xmlDoc = tidy.parseDOM(getDriveService(false).export(modelFileId, "text/html").executeMediaAsInputStream(), null);
-        tidy.pprint(xmlDoc, new FileOutputStream("output/test.xhtml"));
-        com.itextpdf.text.Document doc = new com.itextpdf.text.Document();
-        PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream("output/test.pdf"));
-        doc.open();
-        XMLWorkerHelper.getInstance().parseXHtml(writer, doc, new FileInputStream("output/test.xhtml"));
-        doc.close();
-    }
-
-    public void toWord() throws Exception {
-        toFile(getDriveService(false).export(modelFileId, "application/vnd.openxmlformats-officedocument.wordprocessingml.document").executeMediaAsInputStream(), "output/test.docx");
-    }
-
-    /*public void toPdfFromepub() throws Exception {
-        InputStream stream = getDriveService(false).export(modelFileId, "text/html").executeMediaAsInputStream();
-        toFile(stream, "output/test.html");
-        HtmlLoadOptions optionsepub = new HtmlLoadOptions("testPdf");
-        com.aspose.pdf.Document docepub = new com.aspose.pdf.Document("output/test.html", optionsepub);
-        docepub.save("output/testhtml.pdf");
-    }*/
-
-    public Request getRequest(String varName, String replaceValue) {
-        return new Request()
-                .setReplaceAllText(new ReplaceAllTextRequest()
-                    .setContainsText(new SubstringMatchCriteria()
-                        .setText("{{" + varName + "}}")
-                        .setMatchCase(true))
-                    .setReplaceText(replaceValue));
-    }
-
-    public void updateDocument(List<Request> requests) throws GeneralSecurityException, IOException {
-        BatchUpdateDocumentRequest body = new BatchUpdateDocumentRequest();
-        getDocsService(true)
-                .batchUpdate(duplicateFileId, body.setRequests(requests))
-                .execute();
-    }
-
-    public String downloadToPDF() throws GeneralSecurityException, IOException {
-        InputStream stream = getDriveService(false)
-                .export(duplicateFileId, "application/pdf")
-                .executeMediaAsInputStream();
-        toFile(stream, "output/test.pdf");
-        stream = getDriveService(false)
-                .export(duplicateFileId, "application/pdf")
-                .executeMediaAsInputStream();
-        return toString(stream);
-    }
-
-    public void deleteDuplicate() throws GeneralSecurityException, IOException {
-        getDriveService(true)
-                .delete(duplicateFileId)
-                .execute();
-    }
-
-    protected String toString(InputStream stream) throws IOException {
-        StringBuilder textBuilder = new StringBuilder();
-        try (Reader reader = new BufferedReader(new InputStreamReader(stream, Charset.forName(StandardCharsets.UTF_8.name())))) {
-            int c;
-            while ((c = reader.read()) != -1) {
-                textBuilder.append((char) c);
+    private void replaceTableLoopTags() {
+        Map<Table, Map<Row, List<Row>>> tables = new HashMap<>();
+        for(Object tableObj : doc.getChildNodes(NodeType.TABLE, true)) {
+            Table table = (Table)tableObj;
+            tables.put(table, new HashMap<>());
+            if(UtilWord.canFind(table.getText(), UtilWord.TABLE_LOOP)) {
+                for(Object rowObj : table.getChildNodes(NodeType.ROW, true)) {
+                    Row doc_row = (Row)rowObj;
+                    tables.get(table).put(doc_row, replaceTableLoopTags_rows(doc_row));
+                }
             }
         }
-        return textBuilder.toString();
+        for(Map.Entry<Table, Map<Row, List<Row>>> entry : tables.entrySet()) {
+            for(Map.Entry<Row, List<Row>> row : entry.getValue().entrySet()) {
+                Collections.reverse(row.getValue());
+                for(Row newRow : row.getValue()) {
+                    entry.getKey().insertAfter(newRow, row.getKey());
+                }
+                if(row.getValue().size() > 0)
+                    entry.getKey().removeChild(row.getKey());
+            }
+        }
     }
 
-    protected void toFile(InputStream stream, String outputFile) throws IOException {
-        OutputStream output = new FileOutputStream(outputFile);
-        byte[] buffer = new byte[1024];
-        int bytesRead;
-        while((bytesRead = stream.read(buffer)) != -1) {
-            output.write(buffer, 0, bytesRead);
+    private List<Row> replaceTableLoopTags_rows(Row doc_row) {
+        if(UtilWord.canFind(doc_row.getText(), UtilWord.TABLE_LOOP)) {
+            String sheetName = UtilWord.findFirst(doc_row.getText(), UtilWord.TABLE_LOOP);
+            Sheet sheet = workbook.getSheet(sheetName);
+            if(sheet == null)
+                return new ArrayList<>();
+            List<Row> newRows = new ArrayList<>();
+            for(org.miage.isiForm.google.sheets.Row sheet_row : sheet.getRows()) {
+                Row newRow = (Row)doc_row.deepClone(true);
+                for(Object runObj : newRow.getChildNodes(NodeType.RUN, true)) {
+                    Run run = (Run)runObj;
+                    for(String var : UtilWord.findAll(run.getText(), UtilWord.VAR)) {
+                        org.miage.isiForm.google.sheets.Cell sheet_cell = sheet_row.getCell(sheet.getColumnIndex(var));
+                        String value = sheet_cell != null ? sheet_cell.getValue() : "\\{\\{Erreur, impossible de recuperer " + var + "}}";
+                        run.setText(UtilWord.replace(run.getText(), UtilWord.VAR, var, value));
+                        run.setText(UtilWord.replace(run.getText(), UtilWord.TABLE_LOOP, sheetName, ""));
+                    }
+                }
+                newRows.add(newRow);
+            }
+            return newRows;
         }
-        output.flush();
-        output.close();
+        return new ArrayList<>();
     }
 
-    public List<String> getVars() throws Exception {
-        List<String> vars = new ArrayList<>();
-        String doc = getContent(false);
-        Pattern pattern = Pattern.compile("\\{\\{.*}}", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(doc);
-        int start = 0;
-        while(matcher.find(start)) {
-            vars.add(matcher.group().replaceFirst("\\{\\{", "").replaceFirst("}}", ""));
-            start = matcher.end();
-        }
-        return vars;
+    public void toPDF() throws Exception {
+        doc.save(getTempPDFPath());
     }
 }

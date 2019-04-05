@@ -52,6 +52,14 @@ public class Sheet {
         return columns.getOrDefault(index, null);
     }
 
+    public String getColumnIndex(String id) {
+        for(ColumnMappingInfo column : getColumns()) {
+            if(column.getId().equals(id))
+                return column.getIndex();
+        }
+        return "";
+    }
+
     public Collection<ColumnMappingInfo> getColumns() {
         return columns.values();
     }
