@@ -68,6 +68,10 @@ public class Sheet {
         return Collections.unmodifiableCollection(rows.values());
     }
 
+    public Row getRow(String key) {
+        return rows.getOrDefault(key, null);
+    }
+
     public void save() {
         List<List<Cell>> cellss = new ArrayList<>();
         for(Row row : rows.values()) {

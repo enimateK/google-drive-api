@@ -63,9 +63,10 @@ abstract class WorkbookBase extends GoogleAuthentificationService {
                     String range = col + cell.row + ':' + col + cell.row;
                     ranges_cells.put(range, cell.getValue());
                     cell.updateLastValue();
+                    writeInCells(sheet, cell.getCell(), cell.getValue());
                 }
             }
         }
-        writeInCells(sheet, ranges_cells);
+        //writeInCells(sheet, ranges_cells);
     }
 }

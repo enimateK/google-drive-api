@@ -1,6 +1,7 @@
 package org.miage.isiForm;
 
 import org.miage.isiForm.google.docs.Document;
+import org.miage.isiForm.google.sheets.Sheet;
 import org.miage.isiForm.google.sheets.Workbook;
 import org.miage.isiForm.model.output.ErrorInfo;
 import org.miage.isiForm.model.output.Message;
@@ -84,6 +85,20 @@ public class GoogleSheetsRESTService {
         }
     }
 
+    @GET
+    @Path("/update/{id}/{sheet}/{row}/{var}/{value}")
+    public String updateWorkbook(@PathParam("id") String id, @PathParam("sheet") String sheetName, @PathParam("row") String row, @PathParam("var") String var, @PathParam("value") String value) {
+        try {
+            Workbook workbook = Workbooks.get(id, false);
+            Sheet sheet = workbook.getSheet(sheetName);
+            sheet.getRow(row).getCell(sheet.getColumnIndex(var)).setValue(value);
+            workbook.save();
+            return Message.getJson("La modification a bien été effectuée !");
+        } catch (Throwable ex) {
+            return ErrorInfo.getJson(ex);
+        }
+    }
+
     /**
      * Met à jour la Sheet passée en paramètre
      */
@@ -104,7 +119,6 @@ public class GoogleSheetsRESTService {
      */
     @POST
     @Path("/pdf/{sheetid}/{modelid}")
-    @Consumes("application/json")
     public String getPDF(@PathParam("sheetid") String sheetId, @PathParam("modelid") String docId) {
         try {
 
