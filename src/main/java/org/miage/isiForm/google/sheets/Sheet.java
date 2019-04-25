@@ -6,12 +6,14 @@ import java.util.*;
 
 public class Sheet {
     final Workbook workbook;
+    public final String id;
     public final String name;
     private Map<String, ColumnMappingInfo> columns = new HashMap<>();
     private Map<String, Row> rows = new HashMap<>();
 
-    Sheet(Workbook workbook, String name, List<ColumnMappingInfo> columnInfos, String firstCell, List<List<Object>> cellss) {
+    Sheet(Workbook workbook, String id, String name, List<ColumnMappingInfo> columnInfos, String firstCell, List<List<Object>> cellss) {
         this.workbook = workbook;
+        this.id   = id;
         this.name = name;
         for(ColumnMappingInfo columnInfo : columnInfos) {
             columns.put(columnInfo.getIndex(), columnInfo);

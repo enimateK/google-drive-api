@@ -25,7 +25,7 @@ public class WorkbookInfo {
         fileId  = workbook.fileId;
         version = workbook.getMetadata().getVersion();
         for(Sheet sheet : workbook.getSheets()) {
-            sheets.put(sheet.name, new SheetInfo(sheet));
+            sheets.put(sheet.id, new SheetInfo(sheet));
         }
     }
 

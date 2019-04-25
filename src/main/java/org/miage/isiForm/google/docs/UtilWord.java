@@ -11,15 +11,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UtilWord {
-    private static final String ANYTHING       = "[a-zA-Z0-9 ]*";
+    private static final String ANYTHING       = "[^\\{:}]*";
 
     private static final String KEYWORD_S      = "{{";
     private static final String R_KEYWORD_S    = "\\{\\{";
     private static final String KEYWORD_E      = "}}";
     private static final String R_KEYWORD_E    = "}}";
 
-    private static final String VAR_S          = KEYWORD_S   + "";
-    private static final String R_VAR_S        = R_KEYWORD_S + "";
+    private static final String VAR_S          = KEYWORD_S   + "var:";
+    private static final String R_VAR_S        = R_KEYWORD_S + "var:";
     private static final String R_VAR          = R_VAR_S + ANYTHING + R_KEYWORD_E;
 
     private static final String LOOP_START_S   = KEYWORD_S   + "start:";
@@ -33,10 +33,15 @@ public class UtilWord {
     private static final String R_TABLE_LOOP_S = R_KEYWORD_S + "row:";
     private static final String R_TABLE_LOOP   = R_TABLE_LOOP_S + ANYTHING + R_KEYWORD_E;
 
+    private static final String TABLE_ELEM_S   = KEYWORD_S   + "elem:";
+    private static final String R_TABLE_ELEM_S = R_KEYWORD_S + "elem:";
+    private static final String R_TABLE_ELEM   = R_TABLE_ELEM_S + ANYTHING + R_KEYWORD_E;
+
     public static final int VAR        = 1;
     public static final int LOOP_START = 2;
     public static final int LOOP_END   = 3;
     public static final int TABLE_LOOP = 4;
+    public static final int TABLE_ELEM = 5;
 
     private UtilWord() { }
 
@@ -55,6 +60,8 @@ public class UtilWord {
                 return R_LOOP_END;
             case TABLE_LOOP:
                 return R_TABLE_LOOP;
+            case TABLE_ELEM:
+                return R_TABLE_ELEM;
             default:
                 return "";
         }
@@ -70,6 +77,8 @@ public class UtilWord {
                 return R_LOOP_END_S;
             case TABLE_LOOP:
                 return R_TABLE_LOOP_S;
+            case TABLE_ELEM:
+                return R_TABLE_ELEM_S;
             default:
                 return "";
         }
@@ -81,6 +90,7 @@ public class UtilWord {
             case LOOP_START:
             case LOOP_END:
             case TABLE_LOOP:
+            case TABLE_ELEM:
                 return R_KEYWORD_E;
             default:
                 return "";
@@ -97,6 +107,8 @@ public class UtilWord {
                 return LOOP_END_S;
             case TABLE_LOOP:
                 return TABLE_LOOP_S;
+            case TABLE_ELEM:
+                return TABLE_ELEM_S;
             default:
                 return "";
         }
@@ -108,6 +120,7 @@ public class UtilWord {
             case LOOP_START:
             case LOOP_END:
             case TABLE_LOOP:
+            case TABLE_ELEM:
                 return KEYWORD_E;
             default:
                 return "";
@@ -150,7 +163,63 @@ public class UtilWord {
     public static String replace(String string, int REGEX_ID, String replaceKey, String replaceVal) {
         replaceVal = replaceVal.replaceAll("\\$", "\\\\\\$");
         replaceVal = replaceVal.replaceAll("\\n", "\n\r");
+        replaceKey = replaceKey.replaceAll("\\|", "\\\\\\|");
+        replaceKey = replaceKey.replaceAll("\\.", "\\\\\\.");
         return string.replaceAll(getStartRegex(REGEX_ID) + replaceKey + getEndRegex(REGEX_ID), replaceVal);
+    }
+
+    public static String getFullVar(String var) {
+        return var.split("\\|")[0];
+    }
+
+    public static String getVarSheet(String var) {
+        String fullVar = getFullVar(var);
+        if(fullVar.contains("."))
+            return fullVar.split("\\.")[0];
+        return "";
+    }
+
+    public static String getVar(String var) {
+        String fullVar = getFullVar(var);
+        if(fullVar.contains("."))
+            return fullVar.split("\\.")[1];
+        return fullVar;
+    }
+
+    public static boolean isClause(String var) {
+        return var.contains("|");
+    }
+
+    public static String getFullClause(String var) {
+        if(!isClause(var))
+            return "";
+        return var.split("\\|")[1];
+    }
+
+    public static String getVarClause(String var) {
+        if(!isClause(var))
+            return "";
+        return getFullClause(var).split("=")[0];
+    }
+
+    public static String getVarSheetClause(String var) {
+        String varClause = getVarClause(var);
+        if(varClause.contains("."))
+            return varClause.split("\\.")[0];
+        return "";
+    }
+
+    public static String getVarVarClause(String var) {
+        String varClause = getVarClause(var);
+        if(varClause.contains("."))
+            return varClause.split("\\.")[1];
+        return varClause;
+    }
+
+    public static String getValueClause(String var) {
+        if(!isClause(var))
+            return "";
+        return getFullClause(var).split("=")[1];
     }
 
     public static void writeToFile(InputStream stream, String outputFile) throws IOException {
