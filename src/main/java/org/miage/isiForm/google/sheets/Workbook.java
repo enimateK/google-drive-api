@@ -45,7 +45,7 @@ public class Workbook extends WorkbookBase {
     }
 
     private void addSheet(Sheet sheet) {
-        sheets.put(sheet.name, sheet);
+        sheets.put(sheet.id, sheet);
     }
 
     public Sheet getSheet(String name) {
@@ -64,10 +64,10 @@ public class Workbook extends WorkbookBase {
 
     public void createSheets() throws GeneralSecurityException, IOException {
         lastUpdate = Instant.now();
-        for(SheetMappingInfo sheetInfo : getMappingFile ().getSheets()) {
+        for(SheetMappingInfo sheetInfo : getMappingFile().getSheets()) {
             String firstIndex = sheetInfo.getFirstIndex();
             List<List<Object>> cellss = getCells(sheetInfo.getName(), firstIndex, sheetInfo.getLastIndex());
-            addSheet(new Sheet(this, sheetInfo.getName(), sheetInfo.getColumns(), firstIndex, cellss));
+            addSheet(new Sheet(this, sheetInfo.getId(), sheetInfo.getName(), sheetInfo.getColumns(), firstIndex, cellss));
         }
     }
 

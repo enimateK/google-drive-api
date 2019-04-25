@@ -7,11 +7,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.*;
 
 public class SheetMappingInfo {
+
+    @JsonProperty
+    private String id;
     @JsonBackReference
     private MappingInfo file;
     @JsonManagedReference
     @JsonProperty("columns")
     private Map<String, ColumnMappingInfo> columns;
+
+    public String getId() {
+        return id;
+    }
 
     public String getName() {
         return file.getSheetName(this);

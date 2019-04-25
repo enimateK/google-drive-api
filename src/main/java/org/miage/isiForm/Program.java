@@ -11,15 +11,16 @@ import java.net.URI;
 
 public class Program {
     private final static int    PORT = 9998;
-    private final static String HOST = "http://localhost/";
+    private final static String HOST = "http://localhost";
 
     public static void main(String... args) {
-        getPDF();
+        System.out.println("Lancement de l'API...");
         buildAPIlocally();
+        System.out.println("API lancée ! (" + HOST + ':' + PORT + ")");
     }
 
     private static void buildAPIlocally() {
-        URI baseUri = UriBuilder.fromUri(HOST).port(PORT).build();
+        URI baseUri = UriBuilder.fromUri(HOST + '/').port(PORT).build();
         ResourceConfig config = new ResourceConfig(GoogleSheetsRESTService.class);
         config.register(new CORSFilter());
         HttpServer server = JdkHttpServerFactory.createHttpServer(baseUri, config);
@@ -28,8 +29,8 @@ public class Program {
     private static void getPDF() {
         try {
             Workbook workbook = new Workbook(GoogleSheetsRESTService.SHEET_EXAMPLE);
-            Document doc = new Document(GoogleSheetsRESTService.DOC_EXAMPLE_FORM, workbook);
-            doc.toPDF();
+            Document doc = new Document(GoogleSheetsRESTService.DOC_EXAMPLE_FORM, workbook, "formations", "code_formation", "PHP1-01");
+            doc = new Document(GoogleSheetsRESTService.DOC_EXAMPLE_LIST, workbook);
         } catch(Exception ex) {
             ex.printStackTrace();
         }

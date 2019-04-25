@@ -8,6 +8,7 @@ import org.miage.isiForm.model.output.Message;
 import org.miage.isiForm.model.output.WorkbookInfo;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,12 +36,21 @@ public class GoogleSheetsRESTService {
         }
 
         public static Workbook get(String id, boolean readOnly) throws Exception {
+            Workbook workbook;
             if(!exists(id)) {
                 if(!readOnly)
                     throw new Exception("Vous devez d'abord obtenir les données du google sheet avant d'écrire dedans !");
-                return getNew(id);
+                workbook = getNew(id);
+            } else {
+                if(readOnly) {
+                    workbooks.remove(id);
+                    workbook = getNew(id);
+                } else {
+                    workbook = workbooks.get(id);
+                }
+                workbook.updateSheets();
             }
-            return workbooks.get(id);
+            return workbook;
         }
     }
 
@@ -65,12 +75,12 @@ public class GoogleSheetsRESTService {
     /**
      * Identifiant du modèle de PDF exemple 'Fiche de formation'
      */
-    public static final String DOC_EXAMPLE_FORM = "1fvbeT5fwqiW-mznNvnPUy9sTHXUA7otTVY3GWjtlV08";
+    public static final String DOC_EXAMPLE_FORM = "1BW3e4s3zWfGgmAp2tDOq9ZllMhMpFz2pRPnHFdt201A";
 
     /**
      * Identifiant du modèle de PDF exemple 'Programme de formation global'
      */
-    public static final String DOC_EXAMPLE_LIST = "";
+    public static final String DOC_EXAMPLE_LIST = "1fvbeT5fwqiW-mznNvnPUy9sTHXUA7otTVY3GWjtlV08";
 
     /**
      * Retourne le contenu de la Sheet passé en paramètre en JSON
@@ -102,7 +112,7 @@ public class GoogleSheetsRESTService {
     /**
      * Met à jour la Sheet passée en paramètre
      */
-    @POST
+    /*@POST
     @Path("/update")
     @Consumes("application/json")
     public String updateWorkbook(WorkbookInfo workbookInfo) {
@@ -112,19 +122,39 @@ public class GoogleSheetsRESTService {
         } catch (Throwable ex) {
             return ErrorInfo.getJson(ex);
         }
+    }*/
+
+    /**
+     * Retourne un PDF basé sur le modèle passé en paramètre rempli avec les données de la sheet passée en paramètre
+     */
+    @GET
+    @Path("/ficheformation/{sheetid}/{modelid}/{codeformation}")
+    @Produces("application/pdf")
+    public Response getFicheFormation(@PathParam("sheetid") String sheetId, @PathParam("modelid") String docId, @PathParam("codeformation") String codeFormation) {
+        try {
+            Document doc = new Document(docId, Workbooks.get(sheetId, true), "formations", "code_formation", codeFormation);
+            Response.ResponseBuilder response = Response.ok(doc.getPDF());
+            response.header("Content-Disposition", "attachment; filename=listeformation.pdf");
+            return response.build();
+        } catch (Throwable ex) {
+            return Response.serverError().build();
+        }
     }
 
     /**
      * Retourne un PDF basé sur le modèle passé en paramètre rempli avec les données de la sheet passée en paramètre
      */
-    @POST
-    @Path("/pdf/{sheetid}/{modelid}")
-    public String getPDF(@PathParam("sheetid") String sheetId, @PathParam("modelid") String docId) {
+    @GET
+    @Path("/listeformations/{sheetid}/{modelid}")
+    @Produces("application/pdf")
+    public Response getListeFormations(@PathParam("sheetid") String sheetId, @PathParam("modelid") String docId) {
         try {
-
-            return "";
+            Document doc = new Document(docId, Workbooks.get(sheetId, true));
+            Response.ResponseBuilder response = Response.ok(doc.getPDF());
+            response.header("Content-Disposition", "attachment; filename=listeformation.pdf");
+            return response.build();
         } catch (Throwable ex) {
-            return ErrorInfo.getJson(ex);
+            return Response.serverError().build();
         }
     }
 }
