@@ -13,6 +13,10 @@ public class Row {
             this.cells.put(Util.convertColumn(col), new Cell(this, row, col, object.toString()));
             col++;
         }
+        while(this.cells.size() < sheet.getColumns().size()) {
+            this.cells.put(Util.convertColumn(col), new Cell(this, row, col, ""));
+            col++;
+        }
     }
 
     public void update(List<Object> cells) {
