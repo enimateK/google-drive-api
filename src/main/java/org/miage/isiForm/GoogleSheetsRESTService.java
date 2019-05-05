@@ -95,6 +95,9 @@ public class GoogleSheetsRESTService {
         }
     }
 
+    /**
+     * Met à jour une variable de la sheet
+     */
     @GET
     @Path("/update/{id}/{sheet}/{row}/{var}/{value}")
     public String updateWorkbook(@PathParam("id") String id, @PathParam("sheet") String sheetName, @PathParam("row") String row, @PathParam("var") String var, @PathParam("value") String value) {
@@ -108,21 +111,6 @@ public class GoogleSheetsRESTService {
             return ErrorInfo.getJson(ex);
         }
     }
-
-    /**
-     * Met à jour la Sheet passée en paramètre
-     */
-    /*@POST
-    @Path("/update")
-    @Consumes("application/json")
-    public String updateWorkbook(WorkbookInfo workbookInfo) {
-        try {
-            Workbooks.get(workbookInfo.getFileId(), false).update(workbookInfo);
-            return Message.getJson("La modification a bien été effectuée !");
-        } catch (Throwable ex) {
-            return ErrorInfo.getJson(ex);
-        }
-    }*/
 
     /**
      * Retourne un PDF basé sur le modèle passé en paramètre rempli avec les données de la sheet passée en paramètre
