@@ -15,6 +15,7 @@ public class Program {
 
     public static void main(String... args) {
         System.out.println("Lancement de l'API...");
+        //getPDF();
         buildAPIlocally();
         System.out.println("API lancée ! (" + HOST + ':' + PORT + ")");
     }
@@ -29,8 +30,8 @@ public class Program {
     private static void getPDF() {
         try {
             Workbook workbook = new Workbook(GoogleSheetsRESTService.SHEET_EXAMPLE);
-            Document doc = new Document(GoogleSheetsRESTService.DOC_EXAMPLE_FORM, workbook, "formations", "code_formation", "PHP1-01");
-            doc = new Document(GoogleSheetsRESTService.DOC_EXAMPLE_LIST, workbook);
+            new Document(GoogleSheetsRESTService.DOC_EXAMPLE_FORM, workbook, "formations", "code_formation", "PHP1-01");
+            new Document(GoogleSheetsRESTService.DOC_EXAMPLE_LIST, workbook);
         } catch(Exception ex) {
             ex.printStackTrace();
         }

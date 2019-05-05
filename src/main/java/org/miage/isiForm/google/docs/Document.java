@@ -88,6 +88,22 @@ public class Document extends GoogleAuthentificationService {
         replaceTableLoopTags();
         //replaceLoopTags();
         replaceVarTags();
+        replaceUnusedTags();
+    }
+
+    private void replaceUnusedTags() {
+        for(Object runObj : doc.getChildNodes(NodeType.RUN, true)) {
+            Run run = (Run)runObj;
+            for(String fullVar : UtilWord.findAll(run.getText(), UtilWord.VAR)) {
+                run.setText(UtilWord.replace(run.getText(), UtilWord.VAR, fullVar, ""));
+            }
+            for(String fullVar : UtilWord.findAll(run.getText(), UtilWord.TABLE_LOOP)) {
+                run.setText(UtilWord.replace(run.getText(), UtilWord.VAR, fullVar, ""));
+            }
+            for(String fullVar : UtilWord.findAll(run.getText(), UtilWord.TABLE_ELEM)) {
+                run.setText(UtilWord.replace(run.getText(), UtilWord.VAR, fullVar, ""));
+            }
+        }
     }
 
     private void replaceVarTags() {
@@ -147,7 +163,7 @@ public class Document extends GoogleAuthentificationService {
                 for(Row newRow : row.getValue()) {
                     entry.getKey().insertAfter(newRow, row.getKey());
                 }
-                if(row.getValue().size() > 0)
+                if(row.getValue().size() > 0 || UtilWord.canFind(row.getKey().getText(), UtilWord.TABLE_LOOP))
                     entry.getKey().removeChild(row.getKey());
             }
         }
